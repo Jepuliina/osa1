@@ -1,89 +1,95 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
+import ShowPersons from './components/showPersons'
+import Filtteri from './components/filtteri'
+import persons from './components/persons'
 import axios from 'axios'
 
-class App extends React.Component {
 
+class App extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
-            countries: [],
-            filter: ''
+            persons: [],
+            newName: '',
+            newNumber: '',
+            filter: '',
+            showOne: {}
         }
-
-
     }
 
-
-    componentWillMount() {
-        axios
-            .get('https://restcountries.eu/rest/v2/all')
+    componentDidMount() {
+        persons.getAll()
             .then(response => {
-                this.setState({ countries: response.data })
+                this.setState({persons:response})
             })
     }
 
-    ShowCountries = () => {
-        //const filterCountries = () => {
-        //    //return this.state.countries.filter(function (el) {
-        //    //    return el.toLowerCase().indexOf(this.state.filter.toLowerCase()) > -1
+    handleNameChange = (event) => {  
+        this.setState({ newName: event.target.value })
+    }
 
-        //    //})
-        //}
-        const filtered = this.state.countries.filter(country => country.name.toLowerCase().indexOf(this.state.filter.toLowerCase()) > -1)
-        if (filtered.length > 10) {
-            return (
-                <div>
-                    Too many matches, specify another filter </div>
-            )
-        } else if (filtered.length > 1) {
-            return (
-                <div>
-                    {filtered.map(rivi => <div onClick={()=>this.HandleShowOne(rivi.name)}>{rivi.name}</div>)}
-                </div>
-            )
-        } else if (filtered.length === 1) {
-            return (
-                <div>
-                    {this.ShowCountry(filtered[0])}
-                </div>
-                )
+    handleNumberChange = (event) => {
+        this.setState({newNumber: event.target.value})
+    }
+
+    handleFilter = (value) => {
+        this.setState({filter: value})
+
+    }
+
+    addName = (event) => {
+        event.preventDefault()
+        const namelist = this.state.persons
+        if (!namelist.find(person => person.name.ToLowerCase === this.state.newName.toLowerCase)) {
+            const nameObject = {
+                name: this.state.newName,
+                number: this.state.newNumber
+            }
+
+            axios
+                .post('http://localhost:3001/persons', nameObject)
+                .then(response => {
+                    console.log(response)
+                })
+ 
+            this.setState({
+                    persons: namelist.concat(nameObject),
+                newName: "",
+                newNumber: ""
+            })
+
         } else {
-            return (
-                <div>
-                No matches </div>
-                )
+            this.setState({ newName: "" })
+            this.setState({ newNumber:""})
+            alert("Nimi on jo luettelossa!")
         }
     }
 
-    HandleShowOne = (name) => {
-        this.setState({ filter: name })
-    }
-
-    ShowCountry = (country) => {
-           return (
-            <div>
-                <h1>{country.name}</h1>
-                <p>Capital: {country.capital}</p>
-                <p>Population: {country.population} </p>
-                <p><img src={country.flag} alt={country.name}></img></p>
-                </div>
-        )
-    }
-    handleChange = (event) => {
-
-        this.setState({filter: event.target.value})
-    }
 
     render() {
         return (
             <div>
-                Find countries: <input value={this.state.filter} onChange={this.handleChange} />
-                <this.ShowCountries />
-            </div>
-            )
+                <h2>Puhelinluettelo</h2>
+                <Filtteri onChange={this.handleFilter.bind(this)} filter={this.state.filter} />
+                <form onSubmit={this.addName}>
+                    <div>
+                        nimi: <input value={this.state.newName} onChange={this.handleNameChange} /><br/>
+                        numero: <input value={this.state.newNumber} onChange={this.handleNumberChange} />
+                    </div>
+                    <div>
+                        <button type="submit">lis&auml;&auml;</button>
+                    </div>
+                </form>
+                <h2>Numerot</h2>
+                <ul>
+                    {this.state.persons.map(person => <ShowPersons id={person.id} person={person} filter={this.state.filter} />)}
+                </ul>
+      </div>
+        )
     }
 }
+
 
 ReactDOM.render(
     <App />,
