@@ -8,8 +8,10 @@ class App extends React.Component {
         super(props)
         this.state = {
             countries: [],
-            filter: '',
+            filter: ''
         }
+
+
     }
 
 
@@ -37,18 +39,15 @@ class App extends React.Component {
         } else if (filtered.length > 1) {
             return (
                 <div>
-                    {filtered.map(rivi => <li id={rivi.name}>{rivi.name}</li>)}
+                    {filtered.map(rivi => <div onClick={()=>this.HandleShowOne(rivi.name)}>{rivi.name}</div>)}
                 </div>
             )
         } else if (filtered.length === 1) {
             return (
                 <div>
-                    <h1>{filtered[0].name}</h1>
-                    <p>Capital: {filtered[0].capital}</p>
-                    <p>Population: {filtered[0].population} </p>
-                    <p><img src={filtered[0].flag} alt={filtered[0].name}></img></p>
+                    {this.ShowCountry(filtered[0])}
                 </div>
-            )
+                )
         } else {
             return (
                 <div>
@@ -57,7 +56,22 @@ class App extends React.Component {
         }
     }
 
+    HandleShowOne = (name) => {
+        this.setState({ filter: name })
+    }
+
+    ShowCountry = (country) => {
+           return (
+            <div>
+                <h1>{country.name}</h1>
+                <p>Capital: {country.capital}</p>
+                <p>Population: {country.population} </p>
+                <p><img src={country.flag} alt={country.name}></img></p>
+                </div>
+        )
+    }
     handleChange = (event) => {
+
         this.setState({filter: event.target.value})
     }
 
