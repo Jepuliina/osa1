@@ -4,6 +4,7 @@ import ShowPersons from './components/showPersons'
 import Filtteri from './components/filtteri'
 import persons from './components/persons'
 import axios from 'axios'
+import './index.css'
 
 
 class App extends React.Component {
@@ -14,7 +15,7 @@ class App extends React.Component {
             newName: '',
             newNumber: '',
             filter: '',
-            showOne: {}
+            notification: ''
         }
     }
 
@@ -38,6 +39,21 @@ class App extends React.Component {
 
     }
 
+    Notification = () => {
+        if (this.state.notification === '') {
+            return null
+        }
+
+        setTimeout(() => {
+            this.setState({ notification: null })
+        }, 5000)
+        return (
+            <div className="error">
+                {this.state.notification}
+            </div>
+        )
+    }
+
     addName = (event) => {
         event.preventDefault()
         const namelist = this.state.persons
@@ -58,9 +74,9 @@ class App extends React.Component {
             this.setState({
                 persons: namelist.concat(nameObject),
                 newName: "",
-                newNumber: ""
+                newNumber: "",
+                notification: `Nimi ${this.state.newName} lisatty`
             })
-            window.location.refresh()
 
         } else {
             if (window.confirm(`${this.state.newName} on jo luettelossa, korvataanko vanha numero uudella?`)) {
@@ -69,9 +85,11 @@ class App extends React.Component {
                 const newPerson = this.state.persons[nameindex]
                 newPerson.number = this.state.newNumber
                 persons.updateName(newPerson, newPerson.id)
+                this.setState({ notification: `Nimi ${this.state.newName} paivitetty` })
             }
             this.setState({ newName: "" })
-            this.setState({ newNumber:""})
+            this.setState({ newNumber: "" })
+
         }
     }
 
@@ -80,6 +98,7 @@ class App extends React.Component {
         return (
             <div>
                 <h2>Puhelinluettelo</h2>
+                <this.Notification />
                 <Filtteri onChange={this.handleFilter.bind(this)} filter={this.state.filter} />
                 <form onSubmit={this.addName}>
                     <div>
@@ -92,7 +111,7 @@ class App extends React.Component {
                 </form>
                 <h2>Numerot</h2>
                 <ul>
-                    {this.state.persons.map(person => <ShowPersons id={person.id} person={person} filter={this.state.filter} />)}
+                    {this.state.persons.map(person => <ShowPersons key={person.id} id={person.id} person={person} filter={this.state.filter} />)}
                 </ul>
       </div>
         )

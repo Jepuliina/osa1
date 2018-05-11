@@ -1,5 +1,5 @@
 import axios from 'axios'
-import React from 'react'
+// import React from 'react'
 
 const baseUrl = 'http://localhost:3001/persons'
 
@@ -18,10 +18,6 @@ const removeName = (id) => {
                 console.log(response)
             })
             .catch(error => alert("Tietoa ei löydy"))
-
-        return (
-            <Notification message="Tieto poistettu" />
-        )
     }
 
 }
@@ -36,22 +32,10 @@ const updateName = (person, id) => {
         .catch(error => {
             alert("Tietoa ei löydy")
         })
-    return (
-        <Notification message="Tieto päivitetty" />
-        )
 }
 
 
 
-const Notification = ({ message }) => {
-    if (message === null) {
-        return null
-    }
-    return (
-        <div className="error">
-            {message}
-        </div>
-    )
-}
 
-export default { getAll, removeName, updateName }
+
+export default { getAll, removeName, updateName}
