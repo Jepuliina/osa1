@@ -41,28 +41,37 @@ class App extends React.Component {
     addName = (event) => {
         event.preventDefault()
         const namelist = this.state.persons
-        if (!namelist.find(person => person.name.ToLowerCase === this.state.newName.toLowerCase)) {
+        if (!namelist.find(person => person.name === this.state.newName)) {
             const nameObject = {
                 name: this.state.newName,
                 number: this.state.newNumber
             }
+
+            console.log(nameObject)
 
             axios
                 .post('http://localhost:3001/persons', nameObject)
                 .then(response => {
                     console.log(response)
                 })
- 
+
             this.setState({
-                    persons: namelist.concat(nameObject),
+                persons: namelist.concat(nameObject),
                 newName: "",
                 newNumber: ""
             })
+            window.location.refresh()
 
         } else {
+            if (window.confirm(`${this.state.newName} on jo luettelossa, korvataanko vanha numero uudella?`)) {
+                const listofnames = this.state.persons.map(person => person.name)
+                const nameindex = listofnames.indexOf(this.state.newName)
+                const newPerson = this.state.persons[nameindex]
+                newPerson.number = this.state.newNumber
+                persons.updateName(newPerson, newPerson.id)
+            }
             this.setState({ newName: "" })
             this.setState({ newNumber:""})
-            alert("Nimi on jo luettelossa!")
         }
     }
 

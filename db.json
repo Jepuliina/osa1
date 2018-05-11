@@ -1,19 +1,24 @@
 {
   "persons": [
     {
-      "name": "Arho",
-      "number": "0405546086",
+      "name": "Arto Järvinen",
+      "number": "040-123456",
       "id": 3
     },
     {
-      "name": "eija",
-      "number": "0405636997",
+      "name": "Lea Kutvonen",
+      "number": "040-123456",
       "id": 4
     },
     {
-      "name": "Janika",
-      "number": "0504868654",
+      "name": "Janika Hankaniemi",
+      "number": "123456",
       "id": 5
+    },
+    {
+      "name": "Janika H",
+      "number": "456798",
+      "id": 6
     }
   ]
 }
