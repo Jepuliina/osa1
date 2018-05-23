@@ -1,7 +1,7 @@
 import axios from 'axios'
 // import React from 'react'
 
-const baseUrl = 'http://localhost:3001/persons'
+const baseUrl = 'https://limitless-citadel-77689.herokuapp.com/api/persons'
 
 const getAll = () => {
     const request = axios.get(baseUrl)
@@ -13,12 +13,14 @@ const removeName = (id) => {
     if (window.confirm("Haluatko varmasti poistaa?")) {
         console.log(id)
         axios
-            .delete(`http://localhost:3001/persons/${id}`)
+            .delete(`${baseUrl}/${id}`)
             .then(response => {
                 console.log(response)
             })
             .catch(error => alert("Tietoa ei löydy"))
+        window.location.reload(true);
     }
+
 
 }
 

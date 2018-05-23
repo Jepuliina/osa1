@@ -66,7 +66,7 @@ class App extends React.Component {
             console.log(nameObject)
 
             axios
-                .post('http://localhost:3001/persons', nameObject)
+                .post('https://limitless-citadel-77689.herokuapp.com/api/persons', nameObject)
                 .then(response => {
                     console.log(response)
                 })
@@ -110,7 +110,7 @@ class App extends React.Component {
                     </div>
                 </form>
                 <h2>Numerot</h2>
-                <ul>
+                <ul id="namelist">
                     {this.state.persons.map(person => <ShowPersons key={person.id} id={person.id} person={person} filter={this.state.filter} />)}
                 </ul>
       </div>

@@ -6,7 +6,7 @@ const handleRemove = (objButton) => {
     objButton.preventDefault()
     console.log("taalla", objButton.target.value)
     persons.removeName(objButton.target.value)
-    window.location.refresh()
+   
 }
 const ShowPersons = (props) => {
     const name = props.person.name.toUpperCase()
